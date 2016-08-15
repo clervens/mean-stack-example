@@ -1,0 +1,11 @@
+{
+  "name": "mean-stack-exemple",
+  "version": "0.0.1",
+  "description": "Mean stack exemple",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Volcy, Clervens <clervens.volcy@gmail.com>",
+  "license": "MIT"
+}
