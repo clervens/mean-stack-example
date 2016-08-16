@@ -1,8 +1,12 @@
 var http = require('http');
+var express = require('express');
 
-http.createServer(function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end('Hello World\n');
-}).listen(process.env.PORT||3030);
+var app = express();
+var server = http.createServer(app);
 
-console.log('Server start at http://localhost:' + (process.env.PORT||3030))
+app.use(express.static(path.resolve(__dirname, 'client')));
+
+server.listen(process.env.PORT || 3030, process.env.IP || "0.0.0.0", function(){
+  var addr = server.address();
+  console.log("Server listening at", addr.address + ":" + addr.port);
+});
