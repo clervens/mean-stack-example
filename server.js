@@ -6,6 +6,11 @@ var bodyParser = require('body-parser'),
 	expressSession = require('express-session');
 
 var app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
 // App Configuration
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -15,11 +20,10 @@ app.use(expressSession({
 	saveUninitialized: false
 }));
 
-app.use(express.static(path.resolve(__dirname, 'client')));
+// App Routes
+app.use('/api', require('./app_server/routes/api')());
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.use(express.static(path.resolve(__dirname, 'client')));
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
