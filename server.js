@@ -1,9 +1,19 @@
 var http = require('http'),
 	path	 = require('path');
 var express = require('express');
+var bodyParser = require('body-parser'),
+	cookieParser = require('cookie-parser'),
+	expressSession = require('express-session');
 
 var app = express();
-var server = http.createServer(app);
+// App Configuration
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(expressSession({
+	secret: process.env.SECRET || 'secret',
+	resave: false,
+	saveUninitialized: false
+}));
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 
@@ -16,7 +26,8 @@ app.get('/', function(req, res, next) {
   res.render('index', { title: 'Mean Stack Exemple' });
 });
 
-server.listen(process.env.PORT || 3030, process.env.IP || "0.0.0.0", function(){
+var server = http.createServer(app);
+server.listen(process.env.PORT || 3030, process.env.IP || "localhost", function(){
   var addr = server.address();
-  console.log("Server listening at", addr.address + ":" + addr.port);
+  console.log("Server listening at http://" + addr.address + ":" + addr.port);
 });
