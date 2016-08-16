@@ -22,6 +22,7 @@ app.use(expressSession({
 
 // App Routes
 app.use('/api', require('./app_server/routes/api')());
+app.use('/auth', require('./app_server/routes/auth')());
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 
