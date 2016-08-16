@@ -24,7 +24,7 @@ npm start
 
 ## Credits
 
-[Volcy, Clervens](github.com/clervens)
+[Volcy, Clervens](https://github.com/clervens)
 
 ## License
 
