@@ -13,7 +13,7 @@ module.exports = function() {
             root: req.protocol + '://' + req.get('host') + req.originalUrl
         });
     });
-    router.option('/', function(req, res){
+    router.options('/', function(req, res){
         res.json({
             root: req.protocol + '://' + req.get('host') + req.originalUrl,
             endPoints: router.stack
