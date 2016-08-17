@@ -1,7 +1,7 @@
 {
-  "name": "mean-stack-exemple",
+  "name": "mean-stack-example",
   "version": "0.0.1",
-  "description": "Mean stack exemple",
+  "description": "Mean stack example",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
