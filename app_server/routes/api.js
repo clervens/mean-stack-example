@@ -19,5 +19,8 @@ module.exports = function() {
             endPoints: router.stack
         });
     });
+
+    router.use('/posts', require('./api/posts')());
+
     return router;
 };
