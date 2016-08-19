@@ -28,7 +28,7 @@ app.use(express.static(path.resolve(__dirname, 'client')));
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
-  res.render('index', { title: 'Mean Stack Exemple' });
+  res.render('index', { title: require('./package').name.replace(/-/g, ' ') });
 });
 
 var server = http.createServer(app);
