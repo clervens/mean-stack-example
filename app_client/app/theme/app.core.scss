@@ -8,3 +8,11 @@
 // App Shared Sass variables belong in app.variables.scss.
 
 @import "../pages/home/home";
+@import "../pages/posts-list/posts-list";
+
+@media (min-width: 960px) {
+  ion-content {
+      width: 960px;
+      margin: 0 auto;
+  }
+}

@@ -2,13 +2,18 @@ import {Component} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {HomePage} from './pages/home/home';
+import {PostsListPage} from './pages/posts-list/posts-list';
+
+import { PostsService } from './providers/posts-service/posts-service';
 
 
 @Component({
-  template: '<ion-nav [root]="rootPage"></ion-nav>'
+  template: '<ion-nav [root]="rootPage"></ion-nav>',
+  providers: [PostsService]
 })
 export class MyApp {
-  rootPage: any = HomePage;
+  // rootPage: any = HomePage;
+  rootPage: any = PostsListPage;
 
   constructor(platform: Platform) {
     platform.ready().then(() => {

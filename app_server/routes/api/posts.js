@@ -5,7 +5,16 @@ module.exports = function() {
     router.route('/')
       .get(function(req, res) {
         //TODO: List posts
-        res.json({posts: []});
+        res.json({posts: [
+          {
+            id: 0,
+            title: "abc",
+            content: 'adsd',
+            created_by: {},
+            created_at: new Date(),
+            updated_at: new Date()
+          }
+        ]});
       })
       .post(function(req, res) {
         //TODO: Add a new post
