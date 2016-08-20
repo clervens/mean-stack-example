@@ -4,6 +4,10 @@ var express = require('express');
 var bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
 	expressSession = require('express-session');
+var mongoose = require('mongoose');
+
+require('./app_server/models/models.js');
+mongoose.connect(process.env.MONGODB_URI);
 
 var app = express();
 
