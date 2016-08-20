@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { PostsService } from '../../providers/posts-service/posts-service';
+import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 
 /*
   Generated class for the PostsListPage page.
@@ -10,6 +11,7 @@ import { PostsService } from '../../providers/posts-service/posts-service';
 */
 @Component({
   templateUrl: 'build/pages/posts-list/posts-list.html',
+  pipes: [TimeAgoPipe]
 })
 export class PostsListPage {
   public posts: Array<any> = [];

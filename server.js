@@ -24,12 +24,12 @@ app.use(expressSession({
 app.use('/api', require('./app_server/routes/api')());
 app.use('/auth', require('./app_server/routes/auth')());
 
-app.use(express.static(path.resolve(__dirname, 'client')));
-
 /* GET home page. */
 app.get('/', function(req, res, next) {
   res.render('index', { title: require('./package').name.replace(/-/g, ' ') });
 });
+
+app.use(express.static(path.resolve(__dirname, 'app_client/www')));
 
 var server = http.createServer(app);
 server.listen(process.env.PORT || 3030, process.env.IP || "localhost", function(){
