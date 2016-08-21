@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Create new post
+    </ion-title>
+    <ion-buttons start>
+      <button (click)="dismiss()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Title</ion-label>
+      <ion-input [(ngModel)]="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Content</ion-label>
+      <ion-textarea rows="8" cols="40" [(ngModel)]="content"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-buttons end>
+    <button clear [disabled]="!title || !content" (click)="sendNewPost()">
+      <ion-icon name="send"></ion-icon> Send
+    </button>
+  </ion-buttons>
+</ion-footer>

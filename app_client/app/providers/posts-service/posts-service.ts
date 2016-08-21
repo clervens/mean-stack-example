@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Post } from '../../models/post';
 
 /*
   Generated class for the PostsService provider.
@@ -16,7 +17,7 @@ export class PostsService {
     this.data = null;
   }
 
-  load() {
+  load(): Promise<Post[]> {
     if (this.data) {
       // already loaded data
       return Promise.resolve(this.data);
@@ -27,16 +28,30 @@ export class PostsService {
       // We're using Angular Http provider to request the data,
       // then on the response it'll map the JSON data to a parsed JS object.
       // Next we process the data and resolve the promise with the new data.
-      this.http.get(`/api/posts`)
+      this.http.get(`http://localhost:3030/api/posts`)
         .map(res => res.json())
         .subscribe((data: PostsOutput) => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
-          this.data = data.posts.map((post) => {
-            post.created_at = new Date(post.created_at);
-            return post;
-          });
+          this.data = data.posts;
           resolve(this.data);
+        });
+    });
+  }
+
+  add(post: Post): Promise<Post> {
+    let body = JSON.stringify(post);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return new Promise( (resolve, reject) => {
+      this.http.post(`http://localhost:3030/api/posts`, body, options)
+        .map(res => res.json())
+        .subscribe((data: PostOutput) => {
+          if (data.err) {
+            reject(data.err);
+          }
+          resolve(data.post);
         });
     });
   }
@@ -44,5 +59,13 @@ export class PostsService {
 
 
 interface PostsOutput {
-  posts: Array<any>
+  posts: Array<Post>;
+  err: any;
+}
+
+interface PostOutput {
+  post: Post,
+  postUrl: string;
+  requestUrl: string;
+  err: any;
 }

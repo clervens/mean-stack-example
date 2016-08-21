@@ -11,8 +11,9 @@
 @import "../pages/posts-list/posts-list";
 
 @media (min-width: 960px) {
-  ion-content {
+  ion-nav ion-page ion-content {
       width: 960px;
       margin: 0 auto;
+      position: relative;
   }
 }
