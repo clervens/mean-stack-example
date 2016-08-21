@@ -7,7 +7,7 @@ var Post = mongoose.model('Post');
 module.exports = function() {
   router.route('/')
     .get(function(req, res) {
-      Post.find({}).populate('created_by').exec(function(err, posts) {
+      Post.find({}).sort([['created_at', 'descending']]).populate('created_by').exec(function(err, posts) {
         if (err) {
           res.json(err);
           return;
@@ -25,19 +25,19 @@ module.exports = function() {
       newPost.title = req.body.title;
       newPost.content = req.body.content;
 
-      if (req.isAuthenticated()) {
-        newPost.created_by = req.user._id;
-      }
+      // if (req.isAuthenticated()) {
+      //   newPost.created_by = req.user._id;
+      // }
 
       // save the post
-      newPost.save(function(err) {
+      newPost.save(function(err, post) {
         if (err) {
           console.log('Error in Saving user: ' + err);
           throw err;
         }
         console.log('The creation of the new Post "', newPost.title, "' is completed successfully");
         res.json({
-          post: newPost,
+          post: post,
           postUrl: req.protocol + '://' + req.get('host') + req.originalUrl + '/' + newPost._id,
           requestUrl: req.protocol + '://' + req.get('host') + req.originalUrl
         });
