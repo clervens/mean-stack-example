@@ -9,6 +9,8 @@
 
 @import "../pages/home/home";
 @import "../pages/posts-list/posts-list";
+@import "../pages/post/post";
+@import "../pages/post-edit/post-edit";
 
 @media (min-width: 960px) {
   ion-nav ion-page ion-content {

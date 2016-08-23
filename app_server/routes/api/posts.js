@@ -7,9 +7,9 @@ var Post = mongoose.model('Post');
 module.exports = function() {
   router.route('/')
     .get(function(req, res) {
-      Post.find({}).sort([['created_at', 'descending']]).populate('created_by').exec(function(err, posts) {
+      Post.find({}).sort([['updated_at', 'descending']]).populate('created_by').exec(function(err, posts) {
         if (err) {
-          res.json(err);
+          res.json({err: err});
           return;
         }
         res.json({
@@ -33,7 +33,7 @@ module.exports = function() {
       newPost.save(function(err, post) {
         if (err) {
           console.log('Error in Saving user: ' + err);
-          throw err;
+          res.json({err: err});
         }
         console.log('The creation of the new Post "', newPost.title, "' is completed successfully");
         res.json({
@@ -48,7 +48,7 @@ module.exports = function() {
     .get(function(req, res) {
       Post.findById(req.params.id).populate('created_by').exec(function(err, post) {
         if (err) {
-          res.json(err);
+          res.json({err: err});
           return;
         }
         res.json({post: post});
@@ -57,7 +57,7 @@ module.exports = function() {
     .put(function(req, res) {
       Post.findByIdAndUpdate(req.params.id, req.body.post, {new: true}).populate('created_by').exec(function(err, post) {
         if (err) {
-          res.json(err);
+          res.json({err: err});
           return;
         }
         res.json({post: post});
@@ -66,7 +66,7 @@ module.exports = function() {
     .delete(function(req, res) {
       Post.findByIdAndRemove(req.params.id).populate('created_by').exec(function(err, post) {
         if (err) {
-          res.json(err);
+          res.json({err: err});
           return;
         }
         res.json({post: post});

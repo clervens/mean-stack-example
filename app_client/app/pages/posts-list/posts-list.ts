@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, AlertController } from 'ionic-angular';
 import { PostsService } from '../../providers/posts-service/posts-service';
 import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { JsDatePipe } from '../../pipes/js-date-pipe';
 import { CreatePostModal } from '../modals/create-post/create-post-modal';
 import { Post } from '../../models/post';
+import { PostPage } from '../post/post';
+
 /*
   Generated class for the PostsListPage page.
 
@@ -19,7 +21,7 @@ export class PostsListPage {
   public posts: Array<Post> = [];
 
   constructor(private nav: NavController, private postsService: PostsService,
-      private modalCtrl: ModalController) {}
+      private modalCtrl: ModalController, private alertCtrl: AlertController) {}
 
   ionViewLoaded() {
     this.postsService.load().then((posts) => {
@@ -27,7 +29,7 @@ export class PostsListPage {
     });
   }
 
-  public showCreateModal() {
+  showCreateModal() {
     let modal = this.modalCtrl.create(CreatePostModal)
     modal.onDidDismiss(data => {
       if (!data) {
@@ -35,11 +37,60 @@ export class PostsListPage {
       }
       let post: Post = data;
       this.postsService.add(post).then((post) => {
-        this.posts.push(post);
+        this.posts.unshift(post);
       }).catch((err) => {
         console.log(JSON.stringify(err));
       })
     });
     modal.present();
+  }
+
+  showPost(post: Post) {
+    this.nav.push(PostPage, {post: post, parent: this});
+  }
+
+  delete(post: Post) {
+    return new Promise((resolve, reject) => {
+      let confirm = this.alertCtrl.create({
+        title: 'Delete post',
+        message: 'Are you sure that you want to permanently delete the selected post?',
+        buttons: [ {
+          text: 'Disagree',
+          handler: () => {
+            reject();
+          }
+        },{
+          text: 'Agree',
+          handler: () => {
+            this.postsService.delete(post).then((post) => {
+              this.posts = this.posts.filter((el) => el._id !== post._id);
+              resolve();
+            }).catch((err) => {
+              console.log(JSON.stringify(err));
+              reject();
+            });
+          }
+        }]
+      });
+
+      confirm.present();
+    });
+  }
+
+  update(post: Post) {
+    return new Promise<Post>((resolve, reject) => {
+      this.postsService.update(post).then((updatedPost) => {
+        this.posts.forEach((el) => {
+          if (el._id === updatedPost._id) {
+            el = updatedPost;
+            resolve(updatedPost);
+            return;
+          }
+        });
+      }).catch((err) => {
+        console.log(JSON.stringify(err));
+        reject();
+      });
+    })
   }
 }
