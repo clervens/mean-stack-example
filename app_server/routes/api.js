@@ -22,12 +22,6 @@ module.exports = function(passport) {
       root: req.protocol + '://' + req.get('host') + req.originalUrl
     });
   });
-  router.options('/', function(req, res){
-    res.json({
-      root: req.protocol + '://' + req.get('host') + req.originalUrl,
-      endPoints: router.stack
-    });
-  });
 
   router.use('/posts', require('./api/posts')(passport));
 

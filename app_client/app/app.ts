@@ -8,10 +8,11 @@ import {PostsListPage} from './pages/posts-list/posts-list';
 
 // Services
 import { PostsService } from './providers/posts-service/posts-service';
+import { AuthService } from './providers/auth-service/auth-service';
 
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  providers: [PostsService]
+  providers: [AuthService, PostsService]
 })
 export class MyApp {
   // rootPage: any = HomePage;
