@@ -1,11 +1,18 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController } from 'ionic-angular';
 import { PostsService } from '../../providers/posts-service/posts-service';
+import { AuthService } from '../../providers/auth-service/auth-service';
+// Pipes
 import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { JsDatePipe } from '../../pipes/js-date-pipe';
+// Modals
 import { CreatePostModal } from '../modals/create-post/create-post-modal';
+import { SignInModal } from '../modals/sign-in/sign-in';
+// Models
 import { Post } from '../../models/post';
+// Pages
 import { PostPage } from '../post/post';
+import { SignUpPage } from '../sign-up/sign-up';
 
 /*
   Generated class for the PostsListPage page.
@@ -21,7 +28,8 @@ export class PostsListPage {
   public posts: Array<Post> = [];
 
   constructor(private nav: NavController, private postsService: PostsService,
-      private modalCtrl: ModalController, private alertCtrl: AlertController) {}
+      private modalCtrl: ModalController, private alertCtrl: AlertController,
+      private auth: AuthService) {}
 
   ionViewLoaded() {
     this.postsService.load().then((posts) => {
@@ -92,5 +100,14 @@ export class PostsListPage {
         reject();
       });
     })
+  }
+
+  signup() {
+    this.nav.push(SignUpPage);
+  }
+
+  signin() {
+    let modal = this.modalCtrl.create(SignInModal)
+    modal.present();
   }
 }

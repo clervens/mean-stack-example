@@ -7,6 +7,20 @@ Ionic pages and navigation.
 <ion-header>
   <ion-navbar>
     <ion-title>Timeline</ion-title>
+    <ion-buttons end [hidden]="!auth.isAuthenticated">
+      <button (click)="signin()">
+        <ion-icon name="log-in"></ion-icon>Sign In
+      </button>
+      <button (click)="signup()">
+        <ion-icon name="person-add"></ion-icon>Sign Up
+      </button>
+    </ion-buttons>
+    <ion-buttons end [hidden]="auth.isAuthenticated">
+      <button>{{auth.currentUser.username}}</button>
+      <button>
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

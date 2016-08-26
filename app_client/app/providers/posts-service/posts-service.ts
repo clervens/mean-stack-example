@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { ApiService } from '../api-service';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Post } from '../../models/post';
 
@@ -10,12 +11,13 @@ import { Post } from '../../models/post';
   for more info on providers and Angular 2 DI.
 */
 @Injectable()
-export class PostsService {
+export class PostsService extends ApiService {
   data: any;
 
-  private apiUrl: string = "";
+  private apiUrl: string = `${this.baseApiUrl}/api`;
 
   constructor(private http: Http) {
+    super();
     this.data = null;
   }
 
@@ -84,13 +86,6 @@ export class PostsService {
           resolve(data.post);
         })
     });
-  }
-
-  private defaultRequestOptions(): RequestOptions {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    return options;
   }
 }
 

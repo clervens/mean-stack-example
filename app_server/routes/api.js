@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-module.exports = function() {
+module.exports = function(passport) {
   var pjson = require('../../package');
 
   router.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET,POST,HEAD,PUT,DELETE");
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     next();
   });
 
@@ -28,7 +29,7 @@ module.exports = function() {
     });
   });
 
-  router.use('/posts', require('./api/posts')());
+  router.use('/posts', require('./api/posts')(passport));
 
   return router;
 };

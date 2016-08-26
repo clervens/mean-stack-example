@@ -1,10 +1,11 @@
 var http = require('http'),
-	path	 = require('path');
-var express = require('express');
-var bodyParser = require('body-parser'),
+    path = require('path'),
+    express = require('express'),
+    bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
-	expressSession = require('express-session');
-var mongoose = require('mongoose');
+    expressSession = require('express-session'),
+    mongoose = require('mongoose'),
+		passport = require('passport');
 
 require('./app_server/models/models.js');
 mongoose.connect(process.env.MONGODB_URI);
@@ -23,10 +24,13 @@ app.use(expressSession({
 	resave: false,
 	saveUninitialized: false
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+require('./app_server/passport-init')(passport);
 
 // App Routes
-app.use('/api', require('./app_server/routes/api')());
-app.use('/auth', require('./app_server/routes/auth')());
+app.use('/api', require('./app_server/routes/api')(passport));
+app.use('/auth', require('./app_server/routes/auth')(passport));
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
