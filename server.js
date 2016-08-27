@@ -5,7 +5,8 @@ var http = require('http'),
 	cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
     mongoose = require('mongoose'),
-		passport = require('passport');
+		passport = require('passport'),
+    morgan = require('morgan');
 
 require('./app_server/models/models.js');
 mongoose.connect(process.env.MONGODB_URI);
@@ -17,6 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // App Configuration
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressSession({

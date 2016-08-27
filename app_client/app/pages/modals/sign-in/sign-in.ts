@@ -22,7 +22,7 @@ export class SignInModal {
 
   signin() {
     this.auth.signin(this.username, this.password).then((currentUser) => {
-      this.dismiss();
+      this.viewCtrl.dismiss(currentUser);
     }).catch((err) => {
       this.errorMsg = err.message;
     })

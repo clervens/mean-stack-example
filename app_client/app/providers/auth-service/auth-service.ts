@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../api-service';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import {tokenNotExpired} from 'angular2-jwt';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 
 /*
   Generated class for the AuthService provider.
@@ -14,6 +14,8 @@ import {tokenNotExpired} from 'angular2-jwt';
 export class AuthService extends ApiService {
   private apiUrl: string = `${this.baseApiUrl}/auth`;
   private _currentUser: any;
+
+  public isAuthenticated: boolean = false;
 
   constructor(private http: Http) {
     super();
@@ -35,6 +37,8 @@ export class AuthService extends ApiService {
             reject(data.message);
           }
           this._currentUser = data.user;
+          this.isAuthenticated = true;
+          this.storage.set('id_token', data.token);
           resolve(this._currentUser);
         });
     });
@@ -53,6 +57,8 @@ export class AuthService extends ApiService {
             reject(data.message);
           }
           this._currentUser = data.user;
+          this.isAuthenticated = true;
+          this.storage.set('id_token', data.token);
           resolve(this._currentUser);
         });
     });
@@ -61,9 +67,10 @@ export class AuthService extends ApiService {
   signout() {
     return new Promise((resolve) => {
       this.http.get(`${this.apiUrl}/signout`, this.defaultRequestOptions())
-        .map(res => res.json())
         .subscribe(() => {
           this._currentUser = null;
+          this.isAuthenticated = false;
+          this.storage.remove('id_token');
           resolve();
         });
     });
@@ -71,7 +78,13 @@ export class AuthService extends ApiService {
 
   currentUser() {
     if (this._currentUser) {
-      return Promise.resolve(this._currentUser);;
+      this.isAuthenticated = true;
+      return Promise.resolve(this._currentUser);
+    }
+
+    if (!tokenNotExpired()) {
+      this.isAuthenticated = false;
+      return Promise.reject({message: "Not currentUser or the token is expired"});
     }
 
     return new Promise((resolve, reject) => {
@@ -82,19 +95,17 @@ export class AuthService extends ApiService {
             reject(data.err);
           }
           this._currentUser = data.user;
+          this.isAuthenticated = true;
           resolve(this._currentUser);
         });
     });
-  }
-
-  get isAuthenticated(): boolean {
-    return tokenNotExpired();
   }
 }
 
 interface AuthOutput {
   state: string;
   user: any;
+  token: any;
   message: string;
 }
 

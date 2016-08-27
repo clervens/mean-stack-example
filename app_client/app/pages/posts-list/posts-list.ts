@@ -26,15 +26,22 @@ import { SignUpPage } from '../sign-up/sign-up';
 })
 export class PostsListPage {
   public posts: Array<Post> = [];
+  public user: any = {};
+  public isAuthenticated: boolean = false;
 
   constructor(private nav: NavController, private postsService: PostsService,
       private modalCtrl: ModalController, private alertCtrl: AlertController,
       private auth: AuthService) {}
 
   ionViewLoaded() {
+    this.isAuthenticated = this.auth.isAuthenticated;
     this.postsService.load().then((posts) => {
       this.posts = posts;
     });
+    this.auth.currentUser().then((currentUser) => {
+      this.user = currentUser;
+      this.isAuthenticated = true;
+    })
   }
 
   showCreateModal() {
@@ -108,6 +115,16 @@ export class PostsListPage {
 
   signin() {
     let modal = this.modalCtrl.create(SignInModal)
+    modal.onDidDismiss(currentUser => {
+      this.user = currentUser;
+      this.isAuthenticated = true;
+    });
     modal.present();
   }
+
+  signout() {
+    this.auth.signout();
+    this.isAuthenticated = false;
+  }
+
 }

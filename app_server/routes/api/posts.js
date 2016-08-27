@@ -24,7 +24,7 @@ module.exports = function(passport) {
           });
       });
     })
-    .post(isLoggedIn, function(req, res) {
+    .post(passport.authenticate('jwt', { session: false}), function(req, res) {
       var newPost = new Post();
 
       newPost.title = req.body.title;
@@ -49,9 +49,8 @@ module.exports = function(passport) {
       });
     });
 
-  router.use('/:id', isLoggedIn);
   router.route('/:id')
-    .get(function(req, res) {
+    .get(passport.authenticate('jwt', { session: false}), function(req, res) {
       console.log('2');
       Post.findById(req.params.id).populate('created_by').exec(function(err, post) {
         if (err) {
@@ -61,7 +60,7 @@ module.exports = function(passport) {
         res.json({post: post});
       });
     })
-    .put(function(req, res) {
+    .put(passport.authenticate('jwt', { session: false}), function(req, res) {
       Post.findByIdAndUpdate(req.params.id, req.body.post, {new: true}).populate('created_by').exec(function(err, post) {
         if (err) {
           res.json({err: err});
@@ -70,7 +69,7 @@ module.exports = function(passport) {
         res.json({post: post});
       });
     })
-    .delete(function(req, res) {
+    .delete(passport.authenticate('jwt', { session: false}), function(req, res) {
       Post.findByIdAndRemove(req.params.id).populate('created_by').exec(function(err, post) {
         if (err) {
           res.json({err: err});
@@ -81,11 +80,3 @@ module.exports = function(passport) {
     });
   return router;
 };
-
-function isLoggedIn(req, res, next) {
-  console.log(req.isAuthenticated(), "test");
-  if (req.isAuthenticated() || req.method == "OPTIONS"){
-    return next();
-  }
-  res.status(401).json({err: {message: "You must authenticate to access this resource"}});
-}
