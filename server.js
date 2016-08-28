@@ -9,7 +9,7 @@ var http = require('http'),
     morgan = require('morgan');
 
 require('./app_server/models/models.js');
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_vb7sft65:u61nckkg0h6e53eekun2omrg69@ds013216.mlab.com:13216/heroku_vb7sft65');
 
 var app = express();
 
