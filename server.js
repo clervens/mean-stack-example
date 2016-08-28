@@ -2,14 +2,14 @@ var http = require('http'),
     path = require('path'),
     express = require('express'),
     bodyParser = require('body-parser'),
-	cookieParser = require('cookie-parser'),
+    cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
     mongoose = require('mongoose'),
 		passport = require('passport'),
     morgan = require('morgan');
 
 require('./app_server/models/models.js');
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_vb7sft65:u61nckkg0h6e53eekun2omrg69@ds013216.mlab.com:13216/heroku_vb7sft65');
+mongoose.connect(process.env.MONGODB_URI);
 
 var app = express();
 
@@ -42,7 +42,7 @@ app.get('/', function(req, res, next) {
 app.use(express.static(path.resolve(__dirname, 'app_client/www')));
 
 var server = http.createServer(app);
-server.listen(process.env.PORT || 3030, process.env.IP || "localhost", function(){
+server.listen(process.env.PORT || 3030, function(){
   var addr = server.address();
-  console.log("Server listening at http://" + addr.address + ":" + addr.port);
+  console.log("Server listening at http://" + (process.env.IP || "0.0.0.0") + ":" + addr.port);
 });
