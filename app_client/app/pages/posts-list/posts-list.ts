@@ -41,7 +41,7 @@ export class PostsListPage {
     this.auth.currentUser().then((currentUser) => {
       this.user = currentUser;
       this.isAuthenticated = true;
-    })
+    }).catch((err) => {});
   }
 
   showCreateModal() {

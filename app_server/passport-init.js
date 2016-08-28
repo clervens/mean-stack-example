@@ -43,12 +43,4 @@ module.exports = function(passport) {
       done(err, user);
     });
   });
-
-  function isValidPassword(user, password){
-    return bCrypt.compareSync(password, user.password);
-  };
-  // Generates hash using bCrypt
-  function createHash(password){
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-  };
 }

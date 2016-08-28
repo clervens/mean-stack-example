@@ -19,9 +19,7 @@ export class AuthService extends ApiService {
 
   constructor(private http: Http) {
     super();
-    this.currentUser().catch((err) => {
-      console.log(err);
-    });
+    this.currentUser().catch((err) => {});
   }
 
   signup(username: string, password: string) {
@@ -33,8 +31,8 @@ export class AuthService extends ApiService {
       this.http.post(`${this.apiUrl}/signup`, body, this.defaultRequestOptions())
         .map(res => res.json())
         .subscribe( (data: AuthOutput) => {
-          if (data.state !== 'success') {
-            reject(data.message);
+          if (data.err) {
+            return reject(data.err);
           }
           this._currentUser = data.user;
           this.isAuthenticated = true;
@@ -53,8 +51,8 @@ export class AuthService extends ApiService {
       this.http.post(`${this.apiUrl}/signin`, body, this.defaultRequestOptions())
         .map(res => res.json())
         .subscribe( (data: AuthOutput) => {
-          if (data.state !== 'success') {
-            reject(data.message);
+          if (data.err) {
+            return reject(data.err);
           }
           this._currentUser = data.user;
           this.isAuthenticated = true;
@@ -84,7 +82,7 @@ export class AuthService extends ApiService {
 
     if (!tokenNotExpired()) {
       this.isAuthenticated = false;
-      return Promise.reject({message: "Not currentUser or the token is expired"});
+      return Promise.reject({message: "No currentUser or the token is expired"});
     }
 
     return new Promise((resolve, reject) => {
@@ -92,7 +90,7 @@ export class AuthService extends ApiService {
         .map(res => res.json())
         .subscribe((data: UserOutput) => {
           if (data.err) {
-            reject(data.err);
+            return reject(data.err);
           }
           this._currentUser = data.user;
           this.isAuthenticated = true;
@@ -106,7 +104,7 @@ interface AuthOutput {
   state: string;
   user: any;
   token: any;
-  message: string;
+  err: Error;
 }
 
 interface UserOutput {

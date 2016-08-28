@@ -41,19 +41,21 @@ module.exports = function(passport) {
           return res.json({err: {message: msg}}, false);
         }
         // User exists but wrong password, log the error
-        if (!isValidPassword(user, req.body.password)){
-          var msg = 'Invalid Password';
-          console.log(msg);
-          return res.json({err: {message: msg}}, false); // redirect back to login page
-        }
+        user.comparePassword(req.body.password, function(err, isMatch) {
+          if (!isMatch){
+            var msg = 'Invalid Password';
+            console.log(msg);
+            return res.json({err: {message: msg}}, false); // redirect back to login page
+          }
 
-        var token = jwt.sign({_id: user._id, username: user.username}, process.env.SECRET || 'secret', {
-          expiresIn: "14d"
+          var token = jwt.sign({_id: user._id, username: user.username}, process.env.SECRET || 'secret', {
+            expiresIn: "14d"
+          });
+
+          // User and password both match, return user from done method
+          // which will be treated like success
+          return res.json({user: user, token: token});
         });
-
-        // User and password both match, return user from done method
-        // which will be treated like success
-        return res.json({state: 'success', user: user, token: token});
       }
     );
   });
@@ -72,14 +74,14 @@ module.exports = function(passport) {
       if (user) {
         var msg = 'User already exists with username: '+username;
         console.log(msg);
-        return res.json({err: {message: msg}}, false);
+        return res.json({err: {message: msg}});
       } else {
         // if there is no user, create the user
         var newUser = new User();
 
         // set the user's local credentials
         newUser.username = username;
-        newUser.password = createHash(password);
+        newUser.password = password;
 
         // save the user
         newUser.save(function(err) {
@@ -93,7 +95,7 @@ module.exports = function(passport) {
           });
 
           console.log(newUser.username + ' Registration succesful');
-          return res.json(null, {user: newUser, token: token});
+          return res.json({user: newUser, token: token});
         });
       }
     });
