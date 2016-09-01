@@ -3,7 +3,7 @@ import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Storage, LocalStorage } from 'ionic-angular';
 
 export class ApiService {
-  protected baseApiUrl: string = "/";
+  protected baseApiUrl: string = "";
   protected storage: Storage;
 
   constructor() {
