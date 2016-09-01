@@ -1,8 +1,24 @@
 # Mean Stack Example
 
-...
+## Overview
+
+Minimal example of a web application using MongoDB, ExpressJS, Angular2 (Ionic2) and NodeJS.
+
+### Server Side
+
+Using Express the manage every routes and the HTTP server. The database's management was performed with Mongoose.
+
+#### Authentication
+
+The authentication was performed with passportJS and the use of json web token as his authentication strategy through the passport JWT packet.
+
+### Client Side
+
+The client side is build with Ionic2 who's based on Angular2.
 
 ## Installation
+
+You must have a running instance of MongoDB and set the **MONGODB_URI** env variable to it.
 
 ```
 $ npm install
