@@ -5,7 +5,6 @@ echo "> Changing directory to client folder (app_client)";
 cd app_client;
 echo;
 echo "> Install client node packages";
-npm install --only=dev;
 npm install;
 echo "> Compiling static files";
 gulp build;
