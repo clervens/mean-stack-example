@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "> Execution Post-Install script";
 echo "> Changing directory to client folder (app_client)";
